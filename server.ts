@@ -4,7 +4,7 @@ import connectDB from './config/connectDB';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import verifyJWT from './middleware/verifyJWT';
-import userRouter from './routes/userRoutes';
+import authRouter from './routes/authRoutes';
 import allUsersRouter from './routes/allUsersRoutes';
 import refreshtTokenRouter from './routes/refreshTokenRoutes';
 
@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors())
 
-app.use('/auth', userRouter);
+app.use('/auth', authRouter);
 app.use('/refresh', refreshtTokenRouter)
 
 app.use(verifyJWT);
