@@ -25,7 +25,7 @@ export const userRegister = asyncHandler(async (req, res) => {
 			"lastname": lastname,
 		},
 		process.env.ACCESS_TOKEN_SECRET as string,
-		{ expiresIn: '15m' }
+		{ expiresIn: '15s' }
 	)
 	const refreshToken = jwt.sign(
 		{
@@ -33,7 +33,7 @@ export const userRegister = asyncHandler(async (req, res) => {
 			"lastname": lastname,
 		},
 		process.env.REFRESH_TOKEN_SECRET as string,
-		{ expiresIn: '1d' }
+		{ expiresIn: '15m' }
 	)
 	const user = await UserModel.create({
 		firstname,

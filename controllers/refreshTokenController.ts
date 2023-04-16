@@ -7,10 +7,10 @@ import asyncHandler from 'express-async-handler';
 
 const refreshTokenController = asyncHandler(async (req: Request, res: Response) => {
 	const cookies = req.cookies;
+	console.log("COOKIES: " + cookies);
 	if (!cookies?.jwt) res.sendStatus(401);
 	const refreshToken = cookies.jwt;
 	const foundUser = await UserModel.findOne({ refreshToken });
-	console.log("USER: " + foundUser);
 	jwt.verify(
 		refreshToken,
 		process.env.REFRESH_TOKEN_SECRET as string,
@@ -23,7 +23,7 @@ const refreshTokenController = asyncHandler(async (req: Request, res: Response) 
 					"lastname": decoded.lastname,
 				},
 				process.env.ACCESS_TOKEN_SECRET as string,
-				{ expiresIn: '15m' }
+				{ expiresIn: '15s' }
 			)
 			res.json({ accessToken })
 		}
