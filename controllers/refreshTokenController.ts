@@ -1,22 +1,34 @@
 import { Request, Response } from "express";
 import { UserModel } from "../models/userModel";
 import jwt from 'jsonwebtoken';
-import asyncHandler from 'express-async-handler';
 
 
 
-const refreshTokenController = asyncHandler(async (req: Request, res: Response) => {
+const refreshTokenController = async (req: Request, res: Response) => {
 	const cookies = req.cookies;
-	console.log("COOKIES: " + cookies);
-	if (!cookies?.jwt) res.sendStatus(401);
+	if (!cookies?.jwt) return res.sendStatus(401);
+
 	const refreshToken = cookies.jwt;
+
+	res.clearCookie('jwt', { httpOnly: true, secure: true, sameSite: 'none' })
+
 	const foundUser = await UserModel.findOne({ refreshToken });
+
+	if (!foundUser) {
+		return res.sendStatus(403);
+	}
+
+	const newRefreshTokenArray = foundUser.refreshToken.filter(rt => rt !== refreshToken);
+
 	jwt.verify(
 		refreshToken,
 		process.env.REFRESH_TOKEN_SECRET as string,
-		(err, decoded) => {
-			console.log("ERROR: " + err);
-			if (err || !foundUser) res.sendStatus(403);
+		async (err, decoded) => {
+			if (err) {
+				foundUser.refreshToken = [...newRefreshTokenArray];
+				await foundUser.save();
+			}
+			if (err || decoded.firstname !== foundUser.firstname) return res.sendStatus(403)
 			const accessToken = jwt.sign(
 				{
 					"firstname": decoded.firstname,
@@ -25,9 +37,24 @@ const refreshTokenController = asyncHandler(async (req: Request, res: Response) 
 				process.env.ACCESS_TOKEN_SECRET as string,
 				{ expiresIn: '15s' }
 			)
-			res.json({ accessToken })
+
+			const newRefreshToken = jwt.sign(
+				{
+					"firstname": decoded.firstname,
+					"lastname": decoded.lastname,
+				},
+				process.env.REFRESH_TOKEN_SECRET as string,
+				{ expiresIn: '15m' }
+			)
+
+			foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken]
+			await foundUser.save();
+
+			res.cookie('jwt', newRefreshToken, { httpOnly: true, secure: true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000 })
+
+			res.json({ accessToken, user: foundUser, id: foundUser.id })
 		}
 	)
-})
+}
 
 export default refreshTokenController;
