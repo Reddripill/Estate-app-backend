@@ -32,7 +32,7 @@ export const userRegister = async (req: RequestWithCredentials, res, next) => {
 			"lastname": lastname,
 		},
 		process.env.ACCESS_TOKEN_SECRET as string,
-		{ expiresIn: '15s' }
+		{ expiresIn: '15m' }
 	)
 	const refreshToken = jwt.sign(
 		{
@@ -40,7 +40,7 @@ export const userRegister = async (req: RequestWithCredentials, res, next) => {
 			"lastname": lastname,
 		},
 		process.env.REFRESH_TOKEN_SECRET as string,
-		{ expiresIn: '15m' }
+		{ expiresIn: '15d' }
 	)
 	const user = await UserModel.create({
 		firstname,
@@ -78,7 +78,7 @@ export const login = async (req: Request, res: Response) => {
 				"lastname": user.lastname,
 			},
 			process.env.ACCESS_TOKEN_SECRET as string,
-			{ expiresIn: '15s' }
+			{ expiresIn: '15m' }
 		)
 		const newRefreshToken = jwt.sign(
 			{
@@ -86,7 +86,7 @@ export const login = async (req: Request, res: Response) => {
 				"lastname": user.lastname,
 			},
 			process.env.REFRESH_TOKEN_SECRET as string,
-			{ expiresIn: '15m' }
+			{ expiresIn: '15d' }
 		)
 
 		let refreshTokenArray =

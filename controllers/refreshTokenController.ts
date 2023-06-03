@@ -35,7 +35,7 @@ const refreshTokenController = async (req: Request, res: Response) => {
 					"lastname": decoded.lastname,
 				},
 				process.env.ACCESS_TOKEN_SECRET as string,
-				{ expiresIn: '15s' }
+				{ expiresIn: '15m' }
 			)
 
 			const newRefreshToken = jwt.sign(
@@ -44,7 +44,7 @@ const refreshTokenController = async (req: Request, res: Response) => {
 					"lastname": decoded.lastname,
 				},
 				process.env.REFRESH_TOKEN_SECRET as string,
-				{ expiresIn: '15m' }
+				{ expiresIn: '15d' }
 			)
 
 			foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken]
