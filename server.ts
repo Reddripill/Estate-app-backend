@@ -13,6 +13,7 @@ import refreshtTokenRouter from './routes/refreshTokenRoutes';
 import deleteAllRouter from './routes/deletAllRoute';
 import corsOptions from './config/corsOptions';
 import userRouter from './routes/userRoutes';
+import projectRouter from './routes/projectRoutes';
 
 
 dotenv.config()
@@ -24,7 +25,7 @@ connectDB();
 app.use(credentials)
 app.use(cors(corsOptions))
 
-app.use(express.json())
+app.use(express.json({ limit: 1000000 }))
 app.use(cookieParser())
 
 app.use('/auth', authRouter);
@@ -34,6 +35,7 @@ app.use(verifyJWT);
 app.use('/allUsers', allUsersRouter)
 app.use('/deleteAll', deleteAllRouter)
 app.use('/user', userRouter)
+app.use('/createProject', projectRouter)
 
 app.listen(4444, () => {
 	console.log('Server running');

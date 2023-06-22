@@ -73,8 +73,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 	const deletedUser = await UserModel.deleteOne({ refreshToken })
 
-	console.log('USER: ', deletedUser);
-
 	if (!deletedUser) return res.sendStatus(404);
 	return res.json(foundUser)
 }
