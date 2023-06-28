@@ -1,7 +1,23 @@
 import mongoose from 'mongoose';
 
 const projectSchema = new mongoose.Schema({
+	status: {
+		type: String,
+		required: true
+	},
+	creationDate: {
+		type: String,
+		required: true
+	},
+	projectName: {
+		type: String,
+		required: true
+	},
 	price: {
+		type: String,
+		required: true
+	},
+	userId: {
 		type: String,
 		required: true
 	},
@@ -25,26 +41,24 @@ const projectSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	creators: [
-		{
-			firstname: {
-				type: String,
-				required: true
-			},
-			lastname: {
-				type: String,
-				required: true
-			},
-			phone: {
-				type: String,
-				required: true
-			},
-			email: {
-				type: String,
-				required: true
-			}
+	creator: {
+		firstname: {
+			type: String,
+			required: true
 		},
-	],
+		lastname: {
+			type: String,
+			required: true
+		},
+		phone: {
+			type: String,
+			required: true
+		},
+		email: {
+			type: String,
+			required: true
+		}
+	},
 	checkboxes: {
 		isExplore: {
 			type: Boolean,

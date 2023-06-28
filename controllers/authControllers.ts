@@ -18,10 +18,12 @@ export const userRegister = async (req: RequestWithCredentials, res, next) => {
 		password,
 		phoneNumber,
 		country,
+		avatar,
 	} = req.body;
 	if (
 		!firstname || !lastname || !email ||
-		!password || !phoneNumber || !country
+		!password || !phoneNumber || !country ||
+		!avatar
 	) {
 		res.status(400)
 	}
@@ -50,6 +52,7 @@ export const userRegister = async (req: RequestWithCredentials, res, next) => {
 		phoneNumber,
 		country,
 		refreshToken,
+		avatar,
 	})
 	res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
 	req.accessToken = accessToken;

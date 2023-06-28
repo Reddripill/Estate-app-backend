@@ -35,7 +35,7 @@ app.use(verifyJWT);
 app.use('/allUsers', allUsersRouter)
 app.use('/deleteAll', deleteAllRouter)
 app.use('/user', userRouter)
-app.use('/createProject', projectRouter)
+app.use('/project', projectRouter)
 
 app.listen(4444, () => {
 	console.log('Server running');
