@@ -1,9 +1,10 @@
 import express from 'express';
-import { createProject, getProjects } from '../controllers/projectControllers'
+import { changeProject, createProject, getProjects } from '../controllers/projectControllers'
 
 const router = express.Router();
 
-router.route('/createProject').post(createProject);
 router.route('/:id').get(getProjects)
+router.route('/createProject').post(createProject);
+router.route('/changeProject').post(changeProject);
 
 export default router;

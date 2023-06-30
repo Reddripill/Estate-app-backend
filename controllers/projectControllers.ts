@@ -19,3 +19,15 @@ export const getProjects = async (req: Request, res: Response) => {
 	if (!user) return res.sendStatus(404);
 	return res.json(user)
 }
+
+export const changeProject = async (req: Request, res: Response) => {
+	const { previewPhoto, projectName, projectType, project } = req.body;
+	if (!previewPhoto || !projectName || !projectType) return res.sendStatus(400);
+	const currentProject = await ProjectModel.findOne(project);
+	if (!currentProject) return res.sendStatus(401);
+	currentProject.projectName = projectName;
+	currentProject.previewPhoto = previewPhoto;
+	currentProject.projectType = projectType;
+	const updatedProject = await currentProject.save();
+	res.json({ updatedProject })
+}

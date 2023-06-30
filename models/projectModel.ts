@@ -35,7 +35,7 @@ const projectSchema = new mongoose.Schema({
 	},
 	images: {
 		type: [String],
-		required: false
+		required: true
 	},
 	projectType: {
 		type: String,
@@ -112,6 +112,10 @@ const projectSchema = new mongoose.Schema({
 	pros: {
 		type: [String],
 		required: false
+	},
+	previewPhoto: {
+		type: String,
+		required: true
 	},
 	videoLinks: {
 		type: [String],
