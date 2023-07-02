@@ -7,7 +7,6 @@ export interface RequestWithCredentials extends Request {
 
 export const createProject = async (req: Request, res: Response) => {
 	const currentDate = new Date().toLocaleDateString('en-US');
-	console.log({ creationDate: currentDate, ...req.body });
 	const project = await ProjectModel.create({ creationDate: currentDate, ...req.body });
 	res.json({ project })
 }
@@ -24,10 +23,17 @@ export const changeProject = async (req: Request, res: Response) => {
 	const { previewPhoto, projectName, projectType, project } = req.body;
 	if (!previewPhoto || !projectName || !projectType) return res.sendStatus(400);
 	const currentProject = await ProjectModel.findOne(project);
-	if (!currentProject) return res.sendStatus(401);
+	if (!currentProject) return res.sendStatus(404);
 	currentProject.projectName = projectName;
 	currentProject.previewPhoto = previewPhoto;
 	currentProject.projectType = projectType;
 	const updatedProject = await currentProject.save();
 	res.json({ updatedProject })
+}
+
+export const deleteProject = async (req: Request, res: Response) => {
+	const { project } = req.body;
+	const deleteProject = await ProjectModel.deleteOne(project);
+	if (!deleteProject) return res.sendStatus(404);
+	res.json({ deleteProject })
 }
